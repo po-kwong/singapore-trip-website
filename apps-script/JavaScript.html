@@ -1,0 +1,419 @@
+<script>
+/* Singapore English journey: browser-only, progressively enhanced interactions. */
+(() => {
+  'use strict';
+  const byId = id => document.getElementById(id);
+  const on = (node, event, handler, options) => node?.addEventListener(event, handler, options);
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function setPair(element, zh, en) {
+    const original = document.createElement('span');
+    original.textContent = zh;
+    const translation = document.createElement('span');
+    translation.lang = 'en';
+    translation.textContent = en;
+    element?.replaceChildren(original, translation);
+  }
+
+  // Start muted when the player is in view. Play controls remain available.
+  const videoPlay = byId('video-play');
+  const videoCover = byId('video-cover');
+  let videoObserver;
+  function showVideo(automatic) {
+    if (!videoCover || videoCover.querySelector('iframe')) return;
+    videoObserver?.disconnect();
+    const videoUrl = new URL('https://www.youtube-nocookie.com/embed/Jx1DkG-ZAoI');
+    videoUrl.search = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' }).toString();
+    if (automatic) videoUrl.searchParams.set('mute', '1');
+    const iframe = document.createElement('iframe');
+    iframe.src = videoUrl.href;
+    iframe.title = '新加坡英語學習團影片 / Singapore English Study Tour film';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    videoCover.replaceChildren(iframe);
+    if (!automatic) iframe.focus();
+  }
+  on(videoPlay, 'click', () => showVideo(false));
+  if (videoCover && !motionPreference.matches && 'IntersectionObserver' in window) {
+    videoObserver = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.5)) {
+        showVideo(true);
+      }
+    }, { threshold: 0.5 });
+    videoObserver.observe(videoCover);
+  }
+
+  // Fixed audio clips make the five examples playable without a device voice.
+  const pronunciationClips = JSON.parse(byId('day-pronunciation-data').textContent);
+  const pronunciation = new Audio();
+  let activePronunciation = null;
+  let pronunciationRequest = 0;
+
+  function pronunciationStatus(button) {
+    return button.parentElement.querySelector('.pronunciation-status');
+  }
+
+  function stopPronunciation() {
+    pronunciationRequest++;
+    pronunciation.pause();
+    if (!activePronunciation) return;
+    activePronunciation.classList.remove('is-playing');
+    pronunciationStatus(activePronunciation).replaceChildren();
+    activePronunciation = null;
+  }
+
+  on(pronunciation, 'ended', stopPronunciation);
+  document.querySelectorAll('[data-pronunciation]').forEach(button => {
+    on(button, 'click', () => {
+      stopPronunciation();
+      window.speechSynthesis?.cancel();
+      const request = pronunciationRequest;
+      activePronunciation = button;
+      const status = pronunciationStatus(button);
+      pronunciation.src = pronunciationClips[button.dataset.pronunciation];
+      pronunciation.play().then(() => {
+        if (request !== pronunciationRequest) return;
+        button.classList.add('is-playing');
+        setPair(status, '正在播放讀音。', 'Playing pronunciation.');
+      }).catch(() => {
+        if (request !== pronunciationRequest) return;
+        stopPronunciation();
+        setPair(status, '暫時未能播放，請再試一次。', 'Audio could not play. Try again.');
+      });
+    });
+  });
+
+  // Five-day itinerary tabs support click, keyboard, and a stable selected state.
+  const dayTabs = [...document.querySelectorAll('[data-day]')];
+  function selectDay(tab, focus = false) {
+    stopPronunciation();
+    dayTabs.forEach(item => {
+      const active = item === tab;
+      item.setAttribute('aria-selected', String(active));
+      item.tabIndex = active ? 0 : -1;
+      item.classList.toggle('is-active', active);
+      const panel = byId(`day-${item.dataset.day}`);
+      if (panel) panel.hidden = !active;
+    });
+    if (focus) tab.focus();
+  }
+  dayTabs.forEach((tab, index) => {
+    on(tab, 'click', () => selectDay(tab));
+    on(tab, 'keydown', event => {
+      let next;
+      if (event.key === 'ArrowRight') next = (index + 1) % dayTabs.length;
+      if (event.key === 'ArrowLeft') next = (index - 1 + dayTabs.length) % dayTabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = dayTabs.length - 1;
+      if (next !== undefined) {
+        event.preventDefault();
+        selectDay(dayTabs[next], true);
+      }
+    });
+  });
+  if (dayTabs.length) selectDay(dayTabs.find(tab => tab.getAttribute('aria-selected') === 'true') || dayTabs[0]);
+
+  // Short practice prompts are learning examples, not recorded student quotations.
+  const phrases = {
+    friends: {
+      en: 'Hello! My name is ____. What do you like to do?',
+      zh: '你好！我的名字是＿＿。你喜歡做甚麼？',
+      tip: '先介紹自己，再問新朋友一個問題。聽完可以說「Me too!」或「That sounds fun!」。',
+      tipEn: 'Introduce yourself and ask your new friend a question. After their answer, try saying “Me too!” or “That sounds fun!”'
+    },
+    food: {
+      en: 'May I have this, please? How much is it?',
+      zh: '請給我這個，好嗎？這個多少錢？',
+      tip: '指着餐牌點餐，聽清楚價錢，最後說「Thank you!」。和同學輪流扮演顧客和店員。',
+      tipEn: 'Point to the menu, listen for the price, then say “Thank you!” Take turns being the customer and the server.'
+    },
+    transport: {
+      en: 'Excuse me, where is the bus stop?',
+      zh: '不好意思，巴士站在哪裏？',
+      tip: '練習問路，再用「left」、「right」或「straight ahead」回答。和同學輪流問路和指路。',
+      tipEn: 'Ask for directions and answer with “left”, “right” or “straight ahead”. Take turns asking for and giving directions.'
+    }
+  };
+  const phraseButtons = [...document.querySelectorAll('[data-situation]')];
+  const phraseStatus = byId('phrase-status');
+  const speakButton = byId('phrase-speak');
+  let selectedSituation = 'friends';
+  function setPhrase(key) {
+    const phrase = phrases[key];
+    if (!phrase) return;
+    selectedSituation = key;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    [['phrase-en', phrase.en], ['phrase-zh', phrase.zh], ['phrase-tip-zh', phrase.tip], ['phrase-tip-en', phrase.tipEn]].forEach(([id, text]) => {
+      const node = byId(id);
+      if (node) node.textContent = text;
+    });
+    phraseButtons.forEach(button => {
+      const active = button.dataset.situation === key;
+      button.setAttribute('aria-pressed', String(active));
+      button.classList.toggle('is-active', active);
+    });
+    if (phraseStatus) phraseStatus.textContent = '';
+  }
+  phraseButtons.forEach(button => on(button, 'click', () => setPhrase(button.dataset.situation)));
+  if (phraseButtons.length) setPhrase(phraseButtons.find(button => button.getAttribute('aria-pressed') === 'true')?.dataset.situation || 'friends');
+  on(speakButton, 'click', () => {
+    stopPronunciation();
+    if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+      setPair(phraseStatus, '此瀏覽器未能朗讀，請和老師或同學一起讀。', 'Audio is unavailable in this browser. Read the phrase with a teacher or classmate.');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(phrases[selectedSituation].en.replace('____', 'Alex'));
+    utterance.lang = 'en-SG';
+    utterance.rate = 0.85;
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(item => /^en[-_]SG$/i.test(item.lang))
+      || voices.find(item => /^en[-_]GB$/i.test(item.lang))
+      || voices.find(item => /^en[-_]/i.test(item.lang));
+    if (voice) utterance.voice = voice;
+    utterance.onstart = () => {
+      if (selectedSituation === 'friends') {
+        setPair(phraseStatus, '正在朗讀，示範名字是 Alex。', 'Playing the phrase, using Alex as the example name.');
+      } else {
+        setPair(phraseStatus, '正在朗讀示範句子。', 'Playing the phrase.');
+      }
+    };
+    utterance.onend = () => setPair(phraseStatus, '輪到你了，試着讀一次！', 'Your turn. Try saying it aloud!');
+    utterance.onerror = event => {
+      if (event.error !== 'interrupted' && event.error !== 'canceled' && phraseStatus) {
+        setPair(phraseStatus, '暫時未能朗讀，請和老師或同學一起練習。', 'Audio is unavailable right now. Practise with a teacher or classmate.');
+      }
+    };
+    window.speechSynthesis.speak(utterance);
+  });
+
+  // The template supplies the selected Drive files and their original links.
+  const gallery = byId('gallery');
+  const galleryImage = byId('gallery-image');
+  const captionZh = byId('gallery-caption-zh');
+  const captionEn = byId('gallery-caption-en');
+  const original = byId('photo-original');
+  const count = byId('gallery-count');
+  const thumbs = byId('gallery-thumbnails');
+  const galleryStatus = byId('gallery-status');
+  const playButton = byId('photo-play');
+  const dialog = byId('photo-dialog');
+  let photos = [];
+  let current = 0;
+  let pendingIndex = 0;
+  let loadVersion = 0;
+  let playing = !motionPreference.matches;
+  let galleryInView = !('IntersectionObserver' in window);
+  let timer = null;
+  let focusPaused = false;
+  let lastDialogFocus = null;
+
+  function status(zh, en) {
+    if (zh) setPair(galleryStatus, zh, en);
+    else galleryStatus?.replaceChildren();
+  }
+  function syncDialog() {
+    const photo = photos[current];
+    if (!photo) return;
+    const dialogImage = byId('dialog-image');
+    if (dialogImage) { dialogImage.src = photo.src; dialogImage.alt = photo.alt; }
+    setPair(byId('dialog-caption'), `${photo.caption} (${current + 1} / ${photos.length})`, photo.captionEn);
+  }
+  function syncGallery() {
+    if (count) count.textContent = `${String(current + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
+    if (captionZh) captionZh.textContent = photos[current].caption;
+    if (captionEn) captionEn.textContent = photos[current].captionEn;
+    if (original) original.href = photos[current].driveUrl;
+    thumbs?.querySelectorAll('button').forEach((button, index) => {
+      button.setAttribute('aria-current', index === current ? 'true' : 'false');
+      button.classList.toggle('is-active', index === current);
+    });
+    syncDialog();
+  }
+  function showPhoto(index, userInitiated = true) {
+    if (!photos.length || !galleryImage) return;
+    pendingIndex = (index + photos.length) % photos.length;
+    const next = pendingIndex;
+    const version = ++loadVersion;
+    const photo = photos[next];
+    const loader = new Image();
+    loader.onload = () => {
+      if (version !== loadVersion) return;
+      current = next;
+      galleryImage.src = photo.src;
+      galleryImage.alt = photo.alt;
+      galleryImage.classList.remove('is-loading');
+      syncGallery();
+      status('');
+      if (userInitiated && thumbs && !dialog?.open) {
+        const selected = thumbs.children[current];
+        if (selected) {
+          const track = thumbs.getBoundingClientRect();
+          const photo = selected.getBoundingClientRect();
+          const left = photo.left < track.left ? photo.left - track.left : Math.max(0, photo.right - track.right);
+          const top = photo.top < track.top ? photo.top - track.top : Math.max(0, photo.bottom - track.bottom);
+          if (left || top) thumbs.scrollBy({ left, top, behavior: motionPreference.matches ? 'instant' : 'smooth' });
+        }
+      }
+    };
+    loader.onerror = () => {
+      if (version !== loadVersion) return;
+      galleryImage.classList.remove('is-loading');
+      status('這張相片暫時未能載入。請選擇另一張，或開啟 Google Drive 相簿。', 'This photo could not load. Choose another photo or open the Google Drive album.');
+    };
+    galleryImage.classList.add('is-loading');
+    loader.src = photo.src;
+  }
+  const changePhoto = delta => showPhoto(pendingIndex + delta);
+  function updatePlayback() {
+    window.clearInterval(timer);
+    timer = null;
+    if (playButton) {
+      if (playing) setPair(playButton, '暫停幻燈片', 'Pause slideshow');
+      else setPair(playButton, '播放幻燈片', 'Play slideshow');
+      playButton.setAttribute('aria-pressed', String(playing));
+    }
+    count?.setAttribute('aria-live', playing ? 'off' : 'polite');
+    if (!playing || !galleryInView || photos.length < 2) return;
+    timer = window.setInterval(() => {
+      if (!document.hidden && !focusPaused && !dialog?.open) showPhoto(pendingIndex + 1, false);
+    }, 5000);
+  }
+  on(playButton, 'click', () => {
+    playing = !playing;
+    // An explicit play action takes precedence over the focus/hover that performed it.
+    if (playing) focusPaused = false;
+    updatePlayback();
+  });
+  document.querySelectorAll('[data-gallery-photo]').forEach(link => {
+    on(link, 'click', () => {
+      const index = photos.findIndex(photo => photo.id === link.dataset.galleryPhoto);
+      if (index >= 0) showPhoto(index);
+    });
+  });
+  on(byId('photo-prev'), 'click', () => changePhoto(-1));
+  on(byId('photo-next'), 'click', () => changePhoto(1));
+  on(byId('dialog-prev'), 'click', () => changePhoto(-1));
+  on(byId('dialog-next'), 'click', () => changePhoto(1));
+  on(gallery, 'focusin', event => { focusPaused = event.target !== playButton && event.target.matches(':focus-visible'); });
+  on(gallery, 'focusout', event => { if (!gallery.contains(event.relatedTarget)) focusPaused = false; });
+  on(document, 'visibilitychange', () => { if (!document.hidden) updatePlayback(); });
+  on(gallery, 'keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      changePhoto(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  });
+  function openDialog() {
+    if (!dialog || !photos.length) return;
+    lastDialogFocus = document.activeElement;
+    syncDialog();
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+    document.body.classList.add('photo-dialog-open');
+    byId('dialog-close')?.focus();
+  }
+  function closeDialog() {
+    if (!dialog) return;
+    if (typeof dialog.close === 'function') dialog.close();
+    else {
+      dialog.removeAttribute('open');
+      document.body.classList.remove('photo-dialog-open');
+      lastDialogFocus?.focus();
+    }
+  }
+  on(byId('photo-fullscreen'), 'click', openDialog);
+  on(byId('dialog-close'), 'click', closeDialog);
+  on(dialog, 'close', () => {
+    document.body.classList.remove('photo-dialog-open');
+    lastDialogFocus?.focus();
+  });
+  on(dialog, 'click', event => { if (event.target === dialog) closeDialog(); });
+  on(dialog, 'keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      event.stopPropagation();
+      changePhoto(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  });
+  function enableSwipe(node) {
+    let startX = null;
+    let startY = null;
+    on(node, 'touchstart', event => {
+      if (event.touches.length !== 1) { startX = null; return; }
+      startX = event.touches[0].clientX;
+      startY = event.touches[0].clientY;
+    }, { passive: true });
+    on(node, 'touchend', event => {
+      if (startX === null || !event.changedTouches.length) return;
+      const deltaX = event.changedTouches[0].clientX - startX;
+      const deltaY = event.changedTouches[0].clientY - startY;
+      startX = null;
+      if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) changePhoto(deltaX < 0 ? 1 : -1);
+    }, { passive: true });
+    on(node, 'touchcancel', () => { startX = null; });
+  }
+  enableSwipe(galleryImage);
+  enableSwipe(byId('dialog-image'));
+
+  function initializeGallery() {
+    if (!gallery || !galleryImage) return;
+    try {
+      photos = JSON.parse(byId('trip-photos').textContent);
+      if (!photos.length) throw new Error('Photo index empty');
+      const fragment = document.createDocumentFragment();
+      photos.forEach((photo, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'photo-thumb';
+        button.setAttribute('aria-label', `第 ${index + 1} 張：${photo.caption} / Photo ${index + 1}: ${photo.captionEn}`);
+        const thumbnail = document.createElement('img');
+        thumbnail.src = photo.thumb;
+        thumbnail.alt = '';
+        thumbnail.loading = 'lazy';
+        thumbnail.width = 88;
+        thumbnail.height = 64;
+        button.append(thumbnail);
+        on(button, 'click', () => showPhoto(index));
+        fragment.append(button);
+      });
+      thumbs?.replaceChildren(fragment);
+      ['photo-prev', 'photo-next', 'photo-play', 'dialog-prev', 'dialog-next'].forEach(id => {
+        const button = byId(id);
+        if (button) button.disabled = photos.length < 2;
+      });
+      showPhoto(0, false);
+      updatePlayback();
+    } catch {
+      status('暫時未能載入相簿。請開啟 Google Drive 相簿查看相片。', 'The slideshow could not load. Open the Google Drive album to see the photos.');
+      ['photo-prev', 'photo-next', 'photo-play', 'photo-fullscreen'].forEach(id => {
+        const button = byId(id);
+        if (button) button.disabled = true;
+      });
+      if (count) count.textContent = '—';
+    }
+  }
+  initializeGallery();
+  if (galleryImage && 'IntersectionObserver' in window) {
+    const galleryObserver = new IntersectionObserver(([entry]) => {
+      const visible = entry.isIntersecting && entry.intersectionRatio >= 0.5;
+      if (galleryInView === visible) return;
+      galleryInView = visible;
+      updatePlayback();
+    }, { threshold: 0.5 });
+    galleryObserver.observe(galleryImage);
+  }
+  on(motionPreference, 'change', event => {
+    if (event.matches) {
+      playing = false;
+      updatePlayback();
+    }
+  });
+  on(window, 'pagehide', () => {
+    window.clearInterval(timer);
+    stopPronunciation();
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  });
+})();
+
+</script>

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#a91f36">
+  <meta name="description" content="佛教普光學校新加坡英語學習團：影片、旅程相簿、五天行程與生活英語。 Buddhist Po Kwong School Singapore English Study Tour: film, photos, itinerary and everyday English.">
+  <title>新加坡英語學習團｜Singapore English Study Tour</title>
+  <?!= include_('Stylesheet'); ?>
+</head>
+<body>
+<a class="skip-link" href="#main">跳至主要內容 <span lang="en">Skip to main content</span></a>
+<header class="site-header" id="top">
+  <a class="school-brand" href="#top" aria-label="佛教普光學校新加坡英語學習團首頁 / Buddhist Po Kwong School Singapore English Study Tour home"><img src="data:image/png;base64,<?!= include_('Assets'); ?>" width="621" height="120" alt="香海正覺蓮社佛教普光學校 / HHCKLA Buddhist Po Kwong School"></a>
+  <nav id="site-nav" aria-label="主選單 / Main navigation">
+    <a class="pair" href="#film"><span>旅程影片</span><span lang="en">Trip film</span></a>
+    <a class="pair" href="#journey"><span>五天路線</span><span lang="en">Five days</span></a>
+    <a class="pair" href="#gallery"><span>旅程相簿</span><span lang="en">Photo album</span></a>
+    <a class="pair" href="#practice"><span>英語練習</span><span lang="en">English practice</span></a>
+  </nav>
+</header>
+<main id="main">
+  <section class="film-section" id="film" aria-labelledby="film-heading">
+    <div class="film-screening">
+      <div class="film-reel">
+        <div class="video-frame" id="video-cover">
+          <img src="<?= hero.src ?>" alt="<?= hero.alt ?>" width="<?= hero.width ?>" height="<?= hero.height ?>" fetchpriority="high">
+          <button id="video-play" type="button"><span class="video-play-icon" aria-hidden="true">▶</span><span class="pair"><span>播放旅程影片</span><span lang="en">Play the trip film</span></span></button>
+        </div>
+      </div>
+      <div class="video-footer">
+        <p class="pair"><span>影片預設靜音，可在播放器開聲。</span><span lang="en">Starts muted. Turn on sound in the player.</span></p>
+        <a class="pair" href="https://www.youtube.com/watch?v=Jx1DkG-ZAoI" target="_blank" rel="noopener noreferrer"><span>在 YouTube 觀看 ↗</span><span lang="en">Watch on YouTube</span></a>
+      </div>
+    </div>
+    <div class="film-copy">
+      <div class="film-title">
+        <h1 id="film-heading"><span><span class="title-word">新加坡</span><wbr><span class="title-word">英語學習團</span></span><span lang="en">Singapore English Study Tour</span></h1>
+        <p class="trip-date"><span>2026 年 10 月 26–30 日</span><span lang="en">26–30 October 2026</span></p>
+      </div>
+      <div class="film-summary">
+        <p class="pair film-intro"><span>把英語帶出課室。跟新朋友打招呼、在熟食中心點餐，從一句英語開始認識新加坡。</span><span lang="en">Take English beyond the classroom. Say hello to new friends, order a meal and get to know Singapore one conversation at a time.</span></p>
+        <a class="button button-accent pair" href="#journey"><span>探索五天路線 <span aria-hidden="true">↓</span></span><span lang="en">Explore the five days</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section why" id="why" aria-labelledby="why-heading">
+    <div class="section-heading">
+      <h2 id="why-heading" class="pair"><span>從三個旅程片段說起</span><span lang="en">Three moments from the trip</span></h2>
+    </div>
+    <div class="field-notes">
+      <article class="field-note">
+        <a class="field-photo" href="#gallery" data-gallery-photo="<?= exchange.id ?>" aria-label="看校際交流相片 / View the school exchange photo">
+          <img src="<?= exchange.src ?>" alt="<?= exchange.alt ?>" width="<?= exchange.width ?>" height="<?= exchange.height ?>" loading="lazy">
+          <span class="field-arrow" aria-hidden="true">↗</span>
+        </a>
+        <div class="field-copy">
+          <h3 class="pair"><span>跟新朋友打招呼</span><span lang="en">Say hello to a new friend</span></h3>
+          <p class="pair"><span>到訪 APSN Tanglin School，練習自我介紹，聽聽當地學生怎樣分享自己的生活。</span><span lang="en">At APSN Tanglin School, practise introducing yourself and listen to local students talk about their lives.</span></p>
+          <blockquote class="pair"><span>很高興認識你！</span><span lang="en">“Nice to meet you!”</span></blockquote>
+        </div>
+      </article>
+      <article class="field-note">
+        <a class="field-photo" href="#gallery" data-gallery-photo="<?= food.id ?>" aria-label="看熟食中心相片 / View the hawker centre photo">
+          <img src="<?= food.src ?>" alt="<?= food.alt ?>" width="<?= food.width ?>" height="<?= food.height ?>" loading="lazy">
+          <span class="field-arrow" aria-hidden="true">↗</span>
+        </a>
+        <div class="field-copy">
+          <h3 class="pair"><span>用英語點一餐</span><span lang="en">Order a meal in English</span></h3>
+          <p class="pair"><span>在熟食中心看餐牌、試着點餐和問價。知道怎樣開口，下次便可以再試。</span><span lang="en">Read a menu at a hawker centre, try ordering and ask for the price. A little practice makes it easier to try again.</span></p>
+          <blockquote class="pair"><span>我想要這個，謝謝。</span><span lang="en">“I would like this, please.”</span></blockquote>
+        </div>
+      </article>
+      <article class="field-note">
+        <a class="field-photo" href="#gallery" data-gallery-photo="<?= culture.id ?>" aria-label="看小印度相片 / View the Little India photo">
+          <img src="<?= culture.src ?>" alt="<?= culture.alt ?>" width="<?= culture.width ?>" height="<?= culture.height ?>" loading="lazy">
+          <span class="field-arrow" aria-hidden="true">↗</span>
+        </a>
+        <div class="field-copy">
+          <h3 class="pair"><span>從街道認識文化</span><span lang="en">Discover culture on the street</span></h3>
+          <p class="pair"><span>走過小印度、牛車水和甘榜格南，觀察街道上的語言、食物和建築，和香港的日常生活作比較。</span><span lang="en">In Little India, Chinatown and Kampong Gelam, notice the languages, food and buildings. Compare what you see with everyday life in Hong Kong.</span></p>
+          <blockquote class="pair"><span>有哪些相似的地方？又有哪些不同？</span><span lang="en">“What is similar? What is different?”</span></blockquote>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section itinerary" id="journey" aria-labelledby="journey-heading">
+    <div class="section-heading">
+      <h2 id="journey-heading" class="pair"><span>五天學習路線</span><span lang="en">Five days in Singapore</span></h2>
+      <p class="pair"><span>按日期看簡介會行程，並試做當天的英語小任務。</span><span lang="en">Choose a day to see the planned itinerary and try its English challenge.</span></p>
+    </div>
+    <div class="day-tabs" role="tablist" aria-label="選擇行程日子 / Choose a day">
+      <button id="tab-1" data-day="1" role="tab" type="button" aria-selected="true" aria-controls="day-1"><span class="station-date">26/10</span><span class="pair"><span>第 1 天</span><span lang="en">Day 1</span></span></button>
+      <button id="tab-2" data-day="2" role="tab" type="button" aria-selected="false" aria-controls="day-2" tabindex="-1"><span class="station-date">27/10</span><span class="pair"><span>第 2 天</span><span lang="en">Day 2</span></span></button>
+      <button id="tab-3" data-day="3" role="tab" type="button" aria-selected="false" aria-controls="day-3" tabindex="-1"><span class="station-date">28/10</span><span class="pair"><span>第 3 天</span><span lang="en">Day 3</span></span></button>
+      <button id="tab-4" data-day="4" role="tab" type="button" aria-selected="false" aria-controls="day-4" tabindex="-1"><span class="station-date">29/10</span><span class="pair"><span>第 4 天</span><span lang="en">Day 4</span></span></button>
+      <button id="tab-5" data-day="5" role="tab" type="button" aria-selected="false" aria-controls="day-5" tabindex="-1"><span class="station-date">30/10</span><span class="pair"><span>第 5 天</span><span lang="en">Day 5</span></span></button>
+    </div>
+    <div class="day-panels">
+    <section class="day-panel" id="day-1" role="tabpanel" aria-labelledby="tab-1" tabindex="0">
+      <div class="day-copy">
+        <h3><span class="pair"><span>初到新加坡</span><span lang="en">Hello, Singapore!</span></span></h3>
+        <p><span class="pair"><span>抵達獅城，認識城市地標。</span><span lang="en">Arrive in Singapore and discover its landmarks.</span></span></p>
+        <ul class="route-list">
+          <li><span class="pair"><span>香港出發，飛往新加坡</span><span lang="en">Fly from Hong Kong to Singapore</span></span></li>
+          <li><span class="pair"><span>魚尾獅公園及濱海藝術中心</span><span lang="en">Merlion Park and Esplanade</span></span></li>
+          <li><span class="pair"><span>認識市政區地標</span><span lang="en">Landmarks in the Civic District</span></span></li>
+        </ul>
+      </div>
+      <aside class="learning-prompt">
+        <h4><span class="pair"><span>英語小任務</span><span lang="en">English challenge</span></span></h4>
+        <blockquote><span lang="en">We are in Singapore!</span><span>我們到新加坡了！</span></blockquote>
+        <button class="day-pronunciation pair" type="button" data-pronunciation="1">
+          <span>播放讀音</span><span lang="en">Play pronunciation</span>
+        </button>
+        <p class="pronunciation-status pair" role="status"></p>
+        <p><span class="pair"><span>用一句英語分享抵達的心情。</span><span lang="en">Share how you feel about arriving in one English sentence.</span></span></p>
+      </aside>
+    </section>
+    <section class="day-panel" id="day-2" role="tabpanel" aria-labelledby="tab-2" tabindex="0">
+      <div class="day-copy">
+        <h3><span class="pair"><span>邊探索，邊點餐</span><span lang="en">Taste, talk and discover</span></span></h3>
+        <p><span class="pair"><span>探索文化與自然，再試試開口點餐。</span><span lang="en">Explore history and nature, then try ordering a meal.</span></span></p>
+        <ul class="route-list">
+          <li><span class="pair"><span>新加坡國家博物館</span><span lang="en">National Museum of Singapore</span></span></li>
+          <li><span class="pair"><span>濱海灣花園的雲霧林及花穹</span><span lang="en">Cloud Forest and Flower Dome at Gardens by the Bay</span></span></li>
+          <li><span class="pair"><span>老巴剎美食體驗及點餐練習</span><span lang="en">A meal and ordering practice at Lau Pa Sat</span></span></li>
+        </ul>
+      </div>
+      <aside class="learning-prompt">
+        <h4><span class="pair"><span>英語小任務</span><span lang="en">English challenge</span></span></h4>
+        <blockquote><span lang="en">I would like this, please.</span><span>我想要這個，謝謝。</span></blockquote>
+        <button class="day-pronunciation pair" type="button" data-pronunciation="2">
+          <span>播放讀音</span><span lang="en">Play pronunciation</span>
+        </button>
+        <p class="pronunciation-status pair" role="status"></p>
+        <p><span class="pair"><span>在老師或領隊協助下，練習說出自己的選擇。</span><span lang="en">Practise asking for what you want with help from a teacher or tour leader.</span></span></p>
+      </aside>
+    </section>
+    <section class="day-panel" id="day-3" role="tabpanel" aria-labelledby="tab-3" tabindex="0">
+      <div class="day-copy">
+        <h3><span class="pair"><span>帶着問題去探索</span><span lang="en">Ask, explore and learn</span></span></h3>
+        <p><span class="pair"><span>把好奇心變成一個英語問題。</span><span lang="en">Turn your curiosity into a question in English.</span></span></p>
+        <ul class="route-list">
+          <li><span class="pair"><span>新加坡動物園</span><span lang="en">Singapore Zoo</span></span></li>
+          <li><span class="pair"><span>新加坡科學中心</span><span lang="en">Science Centre Singapore</span></span></li>
+          <li><span class="pair"><span>觀察並分享有趣的發現</span><span lang="en">Observe and share what you discover</span></span></li>
+        </ul>
+      </div>
+      <aside class="learning-prompt">
+        <h4><span class="pair"><span>英語小任務</span><span lang="en">English challenge</span></span></h4>
+        <blockquote><span lang="en">What animal is this?</span><span>這是甚麼動物？</span></blockquote>
+        <button class="day-pronunciation pair" type="button" data-pronunciation="3">
+          <span>播放讀音</span><span lang="en">Play pronunciation</span>
+        </button>
+        <p class="pronunciation-status pair" role="status"></p>
+        <p><span class="pair"><span>找一種喜歡的動物，用英語說出牠的名字。</span><span lang="en">Choose an animal you like and say its name in English.</span></span></p>
+      </aside>
+    </section>
+    <section class="day-panel" id="day-4" role="tabpanel" aria-labelledby="tab-4" tabindex="0">
+      <div class="day-copy">
+        <h3><span class="pair"><span>認識新朋友</span><span lang="en">Meet new friends</span></span></h3>
+        <p><span class="pair"><span>開口介紹自己，聽聽新朋友的故事。</span><span lang="en">Introduce yourself and listen to what your new friends have to say.</span></span></p>
+        <ul class="route-list">
+          <li><span class="pair"><span>探索小印度</span><span lang="en">Explore Little India</span></span></li>
+          <li><span class="pair"><span>APSN Tanglin School 校際交流及校內午膳</span><span lang="en">School exchange and lunch at APSN Tanglin School</span></span></li>
+          <li><span class="pair"><span>牛車水及麥士威熟食中心</span><span lang="en">Chinatown and Maxwell Food Centre</span></span></li>
+        </ul>
+      </div>
+      <aside class="learning-prompt">
+        <h4><span class="pair"><span>英語小任務</span><span lang="en">English challenge</span></span></h4>
+        <blockquote><span lang="en">Hello, my name is…</span><span>你好，我叫……</span></blockquote>
+        <button class="day-pronunciation pair" type="button" data-pronunciation="4">
+          <span>播放讀音</span><span lang="en">Play pronunciation</span>
+        </button>
+        <p class="pronunciation-status pair" role="status"></p>
+        <p><span class="pair"><span>介紹自己，再聆聽新朋友的自我介紹。</span><span lang="en">Introduce yourself, then listen as your new friend does the same.</span></span></p>
+      </aside>
+    </section>
+    <section class="day-panel" id="day-5" role="tabpanel" aria-labelledby="tab-5" tabindex="0">
+      <div class="day-copy">
+        <h3><span class="pair"><span>把新見聞帶回家</span><span lang="en">Bring your discoveries home</span></span></h3>
+        <p><span class="pair"><span>回顧旅程，分享最難忘的發現。</span><span lang="en">Look back on the trip and share what you remember most.</span></span></p>
+        <ul class="route-list">
+          <li><span class="pair"><span>甘榜格南及蘇丹回教堂一帶</span><span lang="en">Kampong Gelam and the area around Sultan Mosque</span></span></li>
+          <li><span class="pair"><span>前往樟宜機場</span><span lang="en">Travel to Changi Airport</span></span></li>
+          <li><span class="pair"><span>乘機返回香港</span><span lang="en">Fly back to Hong Kong</span></span></li>
+        </ul>
+      </div>
+      <aside class="learning-prompt">
+        <h4><span class="pair"><span>英語小任務</span><span lang="en">English challenge</span></span></h4>
+        <blockquote><span lang="en">My favourite place is…</span><span>我最喜歡的地方是……</span></blockquote>
+        <button class="day-pronunciation pair" type="button" data-pronunciation="5">
+          <span>播放讀音</span><span lang="en">Play pronunciation</span>
+        </button>
+        <p class="pronunciation-status pair" role="status"></p>
+        <p><span class="pair"><span>用英語分享你最喜歡的地方。</span><span lang="en">Tell someone about your favourite place in English.</span></span></p>
+      </aside>
+    </section>
+    </div>
+  </section>
+
+  <section class="gallery-section section" id="gallery" aria-labelledby="gallery-heading" aria-roledescription="相片輪播 / Photo carousel">
+    <div class="section-heading">
+      <h2 id="gallery-heading" class="pair"><span>旅程相簿</span><span lang="en">Photo album</span></h2>
+      <a class="pair text-link" href="<?= albumUrl ?>" target="_blank" rel="noopener noreferrer"><span>開啟 Google Drive 相簿 ↗</span><span lang="en">Open the Google Drive album</span></a>
+    </div>
+    <div class="gallery-layout">
+      <div class="gallery-stage">
+        <img id="gallery-image" src="<?= hero.src ?>" alt="<?= hero.alt ?>" width="<?= hero.width ?>" height="<?= hero.height ?>" loading="lazy">
+        <button class="round-control gallery-prev" id="photo-prev" type="button" aria-label="上一張相片 / Previous photo">←</button>
+        <button class="round-control gallery-next" id="photo-next" type="button" aria-label="下一張相片 / Next photo">→</button>
+        <button class="expand-control pair" id="photo-fullscreen" type="button"><span>放大相片</span><span lang="en">Enlarge photo</span></button>
+      </div>
+      <div class="gallery-info">
+        <div class="gallery-details">
+          <p id="gallery-caption" class="pair"><span id="gallery-caption-zh"><?= hero.caption ?></span><span id="gallery-caption-en" lang="en"><?= hero.captionEn ?></span></p>
+          <a id="photo-original" class="pair text-link" href="<?= hero.driveUrl ?>" target="_blank" rel="noopener noreferrer"><span>在 Google Drive 查看原圖 ↗</span><span lang="en">View original photo on Google Drive</span></a>
+        </div>
+        <div id="gallery-thumbnails" class="gallery-thumbnails" aria-label="選擇相片 / Choose a photo"></div>
+        <div class="gallery-tools">
+          <span id="gallery-count" aria-live="polite">01 / <?= photos.length ?></span>
+          <button id="photo-play" class="play-control pair" type="button"><span>播放幻燈片</span><span lang="en">Play slideshow</span></button>
+        </div>
+      </div>
+    </div>
+    <p id="gallery-status" class="status-text pair" role="status"></p>
+  </section>
+
+  <section class="section english-section" id="practice" aria-labelledby="english-heading">
+    <div class="english-intro">
+      <h2 id="english-heading" class="pair"><span>下一句，由你開口</span><span lang="en">Your turn to speak</span></h2>
+      <p class="pair"><span>選一個情境，聽一句英語，再和同學輪流練習。</span><span lang="en">Choose a situation, listen to an English phrase and take turns practising with a classmate.</span></p>
+    </div>
+    <div class="phrase-box">
+      <div class="situation-tabs" aria-label="選擇生活英語情境 / Choose an everyday English situation">
+        <button class="pair" data-situation="friends" aria-pressed="true" type="button"><span>學生交流</span><span lang="en">Meeting people</span></button>
+        <button class="pair" data-situation="food" aria-pressed="false" type="button"><span>飲食文化</span><span lang="en">Ordering food</span></button>
+        <button class="pair" data-situation="transport" aria-pressed="false" type="button"><span>交通問路</span><span lang="en">Asking directions</span></button>
+      </div>
+      <div class="phrase-content">
+        <p id="phrase-en" lang="en">Hello! My name is ____. What do you like to do?</p>
+        <p id="phrase-zh">你好！我的名字是＿＿。你喜歡做甚麼？</p>
+        <button id="phrase-speak" class="speak-button pair" type="button"><span>聽英語示範</span><span lang="en">Listen to the phrase</span></button>
+        <p id="phrase-tip" class="phrase-tip pair"><span id="phrase-tip-zh">先介紹自己，再問新朋友一個問題。</span><span id="phrase-tip-en" lang="en">Introduce yourself, then ask your new friend a question.</span></p>
+        <p id="phrase-status" class="status-text pair" role="status"></p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <img src="data:image/png;base64,<?!= include_('Assets'); ?>" width="621" height="120" alt="香海正覺蓮社佛教普光學校 / HHCKLA Buddhist Po Kwong School">
+  <div class="pair"><strong>英文科｜新加坡英語學習團</strong><span lang="en">English Department | Singapore English Study Tour</span></div>
+  <a class="pair" href="#top"><span>返回頁首 ↑</span><span lang="en">Back to top</span></a>
+</footer>
+<dialog id="photo-dialog" aria-label="放大旅程相片 / Enlarged trip photo">
+  <button id="dialog-close" class="dialog-close pair" type="button"><span>關閉 ✕</span><span lang="en">Close</span></button>
+  <div class="dialog-photo">
+    <button id="dialog-prev" class="round-control" type="button" aria-label="上一張相片 / Previous photo">←</button>
+    <img id="dialog-image" alt="">
+    <button id="dialog-next" class="round-control" type="button" aria-label="下一張相片 / Next photo">→</button>
+  </div>
+  <p id="dialog-caption" class="pair"></p>
+</dialog>
+<script type="application/json" id="trip-photos"><?!= photosJson ?></script>
+<?!= include_('Pronunciation'); ?>
+<?!= include_('JavaScript'); ?>
+</body>
+</html>

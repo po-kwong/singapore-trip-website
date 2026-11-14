@@ -1,0 +1,9 @@
+/tmp/
+/site/
+/content-notes.md
+/DELIVERY.md
+**/.clasp.json
+**/.clasprc.json
+.env
+.env.*
+node_modules/
