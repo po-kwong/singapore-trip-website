@@ -240,12 +240,14 @@
     loader.onload = () => {
       if (version !== loadVersion) return;
       current = next;
+      galleryImage.width = photo.width;
+      galleryImage.height = photo.height;
       galleryImage.src = photo.src;
       galleryImage.alt = photo.alt;
       galleryImage.classList.remove('is-loading');
       syncGallery();
       status('');
-      if (userInitiated && thumbs && !dialog?.open) {
+      if (userInitiated && thumbs?.clientWidth && !dialog?.open) {
         const selected = thumbs.children[current];
         if (selected) {
           const track = thumbs.getBoundingClientRect();
