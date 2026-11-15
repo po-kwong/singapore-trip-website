@@ -4,7 +4,7 @@
 
 A bilingual site for HHCKLA Buddhist Po Kwong School's 26–30 October 2026 English study tour, featuring school exchange, cultural visits and everyday English.
 
-- [瀏覽網站 | View the site](https://jasonwongkwanho.github.io/singapore-trip-website/)
+- [瀏覽網站 | View the site](https://po-kwong.github.io/singapore-trip-website/)
 - [旅程相簿 | Trip album](https://drive.google.com/drive/folders/1ojsLkS6dXNV5zDAw7mvNs0oIZnGh9p9F?usp=sharing)
 - [旅程影片 | Trip film](https://www.youtube.com/watch?v=Jx1DkG-ZAoI)
 
