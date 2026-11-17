@@ -297,6 +297,9 @@ h2.pair > [lang='en'] { font-size: .65em; font-weight: 700; letter-spacing: -.02
 .status-text:empty { display: none; }
 .english-section { display: grid; grid-template-columns: .68fr 1.32fr; align-items: start; gap: 1.65rem 5%; }
 .english-intro p { margin-top: .9rem; max-width: 29rem; }
+.practice-video { margin-top: 1.15rem; }
+.practice-video .video-frame { width: 100%; min-height: 200px; }
+.practice-video a { margin-top: .55rem; font-size: .85rem; text-decoration: underline; text-underline-offset: .2em; }
 .phrase-box { border: 1px solid var(--line); border-radius: 14px; background: var(--wash); overflow: hidden; }
 .situation-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: .55rem; gap: .35rem; background: var(--paper); border-bottom: 1px solid var(--line); }
 .situation-tabs button { border-radius: 999px; padding: .65rem .3rem; background: var(--wash); text-align: center; font-size: .9rem; }
@@ -638,6 +641,15 @@ body.photo-dialog-open { overflow: hidden; }
     <div class="english-intro">
       <h2 id="english-heading" class="pair"><span>下一句，由你開口</span><span lang="en">Your turn to speak</span></h2>
       <p class="pair"><span>選一個情境，聽一句英語，再和同學輪流練習。</span><span lang="en">Choose a situation, listen to an English phrase and take turns practising with a classmate.</span></p>
+      <div class="practice-video">
+        <div class="video-frame">
+          <iframe src="https://www.youtube-nocookie.com/embed/oubzkBUhw6M?playsinline=1"
+            title="實用日常英語 / Useful Daily English Phrases"
+            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+            allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <a class="pair" href="https://youtu.be/oubzkBUhw6M" target="_blank" rel="noopener noreferrer"><span>在 YouTube 觀看 ↗</span><span lang="en">Watch on YouTube</span></a>
+      </div>
     </div>
     <div class="phrase-box">
       <div class="situation-tabs" aria-label="選擇生活英語情境 / Choose an everyday English situation">
