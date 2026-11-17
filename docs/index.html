@@ -295,10 +295,15 @@ h2.pair > [lang='en'] { font-size: .65em; font-weight: 700; letter-spacing: -.02
 .gallery-section :focus-visible, .film-section :focus-visible, #photo-dialog :focus-visible { outline-color: #d76674; }
 .status-text { font-size: .85rem; margin-top: .55rem; }
 .status-text:empty { display: none; }
-.english-section { display: grid; grid-template-columns: .68fr 1.32fr; align-items: start; gap: 1.65rem 5%; }
-.english-intro p { margin-top: .9rem; max-width: 29rem; }
-.practice-video { margin-top: 1.15rem; }
-.practice-video .video-frame { width: 100%; min-height: 200px; }
+.english-section {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: clamp(1.2rem, 2.4vw, 2rem);
+}
+.english-intro { grid-column: 1 / -1; }
+.english-intro p { margin-top: .9rem; max-width: 46rem; }
+.practice-video .video-frame { width: 100%; min-height: 200px; border-radius: 14px; }
 .practice-video a { margin-top: .55rem; font-size: .85rem; text-decoration: underline; text-underline-offset: .2em; }
 .phrase-box { border: 1px solid var(--line); border-radius: 14px; background: var(--wash); overflow: hidden; }
 .situation-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: .55rem; gap: .35rem; background: var(--paper); border-bottom: 1px solid var(--line); }
@@ -340,6 +345,7 @@ body.photo-dialog-open { overflow: hidden; }
 }
 @media (max-width: 840px) {
   .film-section { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; }
+  .english-section { grid-template-columns: minmax(0, 1fr); }
   .film-reel { display: block; }
   .film-reel::before, .film-reel::after { display: none; }
   .film-copy h1 > span:first-child { font-size: clamp(1.6rem, 6.4vw, 2.7rem); }
@@ -358,7 +364,7 @@ body.photo-dialog-open { overflow: hidden; }
   .field-note:first-child { grid-row: auto; }
   .field-note:first-child .field-photo > img, .field-note:not(:first-child) .field-photo > img { aspect-ratio: 16 / 10; }
   .field-note:not(:first-child) { grid-template-columns: minmax(0, 1fr); }
-  .day-panel, .english-section { grid-template-columns: minmax(0, 1fr); }
+  .day-panel { grid-template-columns: minmax(0, 1fr); }
   .day-tabs button { font-size: .84rem; }
   .learning-prompt { border-left: 0; border-top: 2px dashed #bc858b; }
   .site-footer { flex-wrap: wrap; gap: .7rem; padding-block: 1.2rem; }
@@ -433,7 +439,7 @@ body.photo-dialog-open { overflow: hidden; }
   <section class="film-section" id="film" aria-labelledby="film-heading">
     <div class="film-screening">
       <div class="film-reel">
-        <div class="video-frame" id="video-cover">
+        <div class="video-frame" id="video-cover" data-video-id="Jx1DkG-ZAoI" data-video-title="新加坡英語學習團影片 / Singapore English Study Tour film">
           <img src="https://drive.google.com/thumbnail?id=1jeAuAhBzMHLMhG5eOMGWYLG3AVo34Pkw&amp;sz=w1400" alt="蘇丹回教堂前，留下文化探索的足跡 / The study tour group at Sultan Mosque" width="958" height="718" fetchpriority="high">
           <button id="video-play" type="button"><span class="video-play-icon" aria-hidden="true">▶</span><span class="pair"><span>播放旅程影片</span><span lang="en">Play the trip film</span></span></button>
         </div>
@@ -641,15 +647,13 @@ body.photo-dialog-open { overflow: hidden; }
     <div class="english-intro">
       <h2 id="english-heading" class="pair"><span>下一句，由你開口</span><span lang="en">Your turn to speak</span></h2>
       <p class="pair"><span>選一個情境，聽一句英語，再和同學輪流練習。</span><span lang="en">Choose a situation, listen to an English phrase and take turns practising with a classmate.</span></p>
-      <div class="practice-video">
-        <div class="video-frame">
-          <iframe src="https://www.youtube-nocookie.com/embed/oubzkBUhw6M?playsinline=1"
-            title="實用日常英語 / Useful Daily English Phrases"
-            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-            allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <a class="pair" href="https://youtu.be/oubzkBUhw6M" target="_blank" rel="noopener noreferrer"><span>在 YouTube 觀看 ↗</span><span lang="en">Watch on YouTube</span></a>
+    </div>
+    <div class="practice-video">
+      <div class="video-frame" data-video-id="oubzkBUhw6M" data-video-title="實用日常英語 / Useful Daily English Phrases" data-start-muted>
+        <img src="https://i.ytimg.com/vi/oubzkBUhw6M/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy">
+        <button type="button"><span class="video-play-icon" aria-hidden="true">▶</span><span class="pair"><span>播放日常英語影片</span><span lang="en">Play the everyday English video</span></span></button>
       </div>
+      <a class="pair" href="https://youtu.be/oubzkBUhw6M" target="_blank" rel="noopener noreferrer"><span>在 YouTube 觀看 ↗</span><span lang="en">Watch on YouTube</span></a>
     </div>
     <div class="phrase-box">
       <div class="situation-tabs" aria-label="選擇生活英語情境 / Choose an everyday English situation">
@@ -699,34 +703,35 @@ body.photo-dialog-open { overflow: hidden; }
     element?.replaceChildren(original, translation);
   }
 
-  // Start muted when the player is in view. Play controls remain available.
-  const videoPlay = byId('video-play');
-  const videoCover = byId('video-cover');
-  let videoObserver;
-  function showVideo(automatic) {
-    if (!videoCover || videoCover.querySelector('iframe')) return;
-    videoObserver?.disconnect();
-    const videoUrl = new URL('https://www.youtube-nocookie.com/embed/Jx1DkG-ZAoI');
-    videoUrl.search = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' }).toString();
-    if (automatic) videoUrl.searchParams.set('mute', '1');
-    const iframe = document.createElement('iframe');
-    iframe.src = videoUrl.href;
-    iframe.title = '新加坡英語學習團影片 / Singapore English Study Tour film';
-    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-    iframe.allowFullscreen = true;
-    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-    videoCover.replaceChildren(iframe);
-    if (!automatic) iframe.focus();
-  }
-  on(videoPlay, 'click', () => showVideo(false));
-  if (videoCover && !motionPreference.matches && 'IntersectionObserver' in window) {
-    videoObserver = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.5)) {
-        showVideo(true);
-      }
-    }, { threshold: 0.5 });
-    videoObserver.observe(videoCover);
-  }
+  // Start each player once, with muted autoplay when its cover comes into view.
+  document.querySelectorAll('.video-frame[data-video-id]').forEach(videoCover => {
+    let videoObserver;
+    function showVideo(automatic) {
+      if (videoCover.querySelector('iframe')) return;
+      videoObserver?.disconnect();
+      const videoUrl = new URL('https://www.youtube-nocookie.com/embed/' + videoCover.dataset.videoId);
+      videoUrl.search = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' }).toString();
+      if (automatic || videoCover.hasAttribute('data-start-muted')) videoUrl.searchParams.set('mute', '1');
+      const iframe = document.createElement('iframe');
+      iframe.src = videoUrl.href;
+      iframe.title = videoCover.dataset.videoTitle;
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      videoCover.replaceChildren(iframe);
+      if (!automatic) iframe.focus();
+    }
+
+    on(videoCover.querySelector('button'), 'click', () => showVideo(false));
+    if (!motionPreference.matches && 'IntersectionObserver' in window) {
+      videoObserver = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.5)) {
+          showVideo(true);
+        }
+      }, { threshold: 0.5 });
+      videoObserver.observe(videoCover);
+    }
+  });
 
   // Fixed audio clips make the five examples playable without a device voice.
   const pronunciationClips = JSON.parse(byId('day-pronunciation-data').textContent);

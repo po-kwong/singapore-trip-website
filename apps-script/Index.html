@@ -23,7 +23,7 @@
   <section class="film-section" id="film" aria-labelledby="film-heading">
     <div class="film-screening">
       <div class="film-reel">
-        <div class="video-frame" id="video-cover">
+        <div class="video-frame" id="video-cover" data-video-id="Jx1DkG-ZAoI" data-video-title="新加坡英語學習團影片 / Singapore English Study Tour film">
           <img src="<?= hero.src ?>" alt="<?= hero.alt ?>" width="<?= hero.width ?>" height="<?= hero.height ?>" fetchpriority="high">
           <button id="video-play" type="button"><span class="video-play-icon" aria-hidden="true">▶</span><span class="pair"><span>播放旅程影片</span><span lang="en">Play the trip film</span></span></button>
         </div>
@@ -231,15 +231,13 @@
     <div class="english-intro">
       <h2 id="english-heading" class="pair"><span>下一句，由你開口</span><span lang="en">Your turn to speak</span></h2>
       <p class="pair"><span>選一個情境，聽一句英語，再和同學輪流練習。</span><span lang="en">Choose a situation, listen to an English phrase and take turns practising with a classmate.</span></p>
-      <div class="practice-video">
-        <div class="video-frame">
-          <iframe src="https://www.youtube-nocookie.com/embed/oubzkBUhw6M?playsinline=1"
-            title="實用日常英語 / Useful Daily English Phrases"
-            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-            allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <a class="pair" href="https://youtu.be/oubzkBUhw6M" target="_blank" rel="noopener noreferrer"><span>在 YouTube 觀看 ↗</span><span lang="en">Watch on YouTube</span></a>
+    </div>
+    <div class="practice-video">
+      <div class="video-frame" data-video-id="oubzkBUhw6M" data-video-title="實用日常英語 / Useful Daily English Phrases" data-start-muted>
+        <img src="https://i.ytimg.com/vi/oubzkBUhw6M/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy">
+        <button type="button"><span class="video-play-icon" aria-hidden="true">▶</span><span class="pair"><span>播放日常英語影片</span><span lang="en">Play the everyday English video</span></span></button>
       </div>
+      <a class="pair" href="https://youtu.be/oubzkBUhw6M" target="_blank" rel="noopener noreferrer"><span>在 YouTube 觀看 ↗</span><span lang="en">Watch on YouTube</span></a>
     </div>
     <div class="phrase-box">
       <div class="situation-tabs" aria-label="選擇生活英語情境 / Choose an everyday English situation">

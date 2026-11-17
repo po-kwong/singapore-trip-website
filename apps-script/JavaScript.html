@@ -14,34 +14,35 @@
     element?.replaceChildren(original, translation);
   }
 
-  // Start muted when the player is in view. Play controls remain available.
-  const videoPlay = byId('video-play');
-  const videoCover = byId('video-cover');
-  let videoObserver;
-  function showVideo(automatic) {
-    if (!videoCover || videoCover.querySelector('iframe')) return;
-    videoObserver?.disconnect();
-    const videoUrl = new URL('https://www.youtube-nocookie.com/embed/Jx1DkG-ZAoI');
-    videoUrl.search = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' }).toString();
-    if (automatic) videoUrl.searchParams.set('mute', '1');
-    const iframe = document.createElement('iframe');
-    iframe.src = videoUrl.href;
-    iframe.title = '新加坡英語學習團影片 / Singapore English Study Tour film';
-    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-    iframe.allowFullscreen = true;
-    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-    videoCover.replaceChildren(iframe);
-    if (!automatic) iframe.focus();
-  }
-  on(videoPlay, 'click', () => showVideo(false));
-  if (videoCover && !motionPreference.matches && 'IntersectionObserver' in window) {
-    videoObserver = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.5)) {
-        showVideo(true);
-      }
-    }, { threshold: 0.5 });
-    videoObserver.observe(videoCover);
-  }
+  // Start each player once, with muted autoplay when its cover comes into view.
+  document.querySelectorAll('.video-frame[data-video-id]').forEach(videoCover => {
+    let videoObserver;
+    function showVideo(automatic) {
+      if (videoCover.querySelector('iframe')) return;
+      videoObserver?.disconnect();
+      const videoUrl = new URL('https://www.youtube-nocookie.com/embed/' + videoCover.dataset.videoId);
+      videoUrl.search = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' }).toString();
+      if (automatic || videoCover.hasAttribute('data-start-muted')) videoUrl.searchParams.set('mute', '1');
+      const iframe = document.createElement('iframe');
+      iframe.src = videoUrl.href;
+      iframe.title = videoCover.dataset.videoTitle;
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      videoCover.replaceChildren(iframe);
+      if (!automatic) iframe.focus();
+    }
+
+    on(videoCover.querySelector('button'), 'click', () => showVideo(false));
+    if (!motionPreference.matches && 'IntersectionObserver' in window) {
+      videoObserver = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.5)) {
+          showVideo(true);
+        }
+      }, { threshold: 0.5 });
+      videoObserver.observe(videoCover);
+    }
+  });
 
   // Fixed audio clips make the five examples playable without a device voice.
   const pronunciationClips = JSON.parse(byId('day-pronunciation-data').textContent);
